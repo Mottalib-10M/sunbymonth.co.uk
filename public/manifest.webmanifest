@@ -1,0 +1,21 @@
+{
+ "name": "Sun by Month",
+ "short_name": "Sun by Month",
+ "description": "Holiday weather month by month: daytime highs, sea temperature, rain days and sunshine for 50 destinations, from NOAA station records 1991 to 2020. Where is hot in each month.",
+ "start_url": "/en/",
+ "display": "standalone",
+ "background_color": "#ffffff",
+ "theme_color": "#B4530A",
+ "icons": [
+  {
+   "src": "/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ]
+}

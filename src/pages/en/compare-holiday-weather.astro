@@ -1,0 +1,45 @@
+---
+/** Compare two places: the tool at once, then pairs that British travellers weigh against each other. Figures from the kit. */
+import PageLayout from '../../layouts/PageLayout.astro';
+import ClimateTool from '../../components/calc/ClimateTool';
+import { route } from '../../i18n/routes';
+import { helpers, SOURCES } from '../../lib/helpers';
+import { toolLinks } from '../../lib/tool-links';
+import { AUTHOR_NAME } from '../../data/site-config';
+import { faqSchema, breadcrumbSchema, webPageSchema, webApplicationSchema } from '../../lib/seo';
+const lang = 'en';
+const h = helpers();
+const path = route('compare', lang);
+const title = 'Compare Holiday Weather: Two Places Side by Side, by Month';
+const description = 'Compare holiday weather for two places in the same month: daytime high, night low, sea temperature, rain and wet days, from NOAA records, 1991 to 2020.';
+const pairs: Array<[string, string, number]> = [['tenerife', 'lanzarote', 1], ['tenerife', 'hurghada', 12], ['majorca', 'crete', 6], ['larnaca', 'antalya', 10], ['dubai', 'hurghada', 2], ['phuket', 'koh-samui', 8], ['malta', 'corfu', 9], ['madeira', 'cape-verde', 11]];
+const rows = pairs.map(([a, b, m]) => [h.MONTHS[m - 1], `${h.D(a).name} / ${h.D(b).name}`, `${h.hi(a, m)} / ${h.hi(b, m)}`, `${h.sea(a, m)} / ${h.sea(b, m)}`, `${h.wet(a, m)} / ${h.wet(b, m)}`]);
+const faqs = [
+  { q: 'Which is warmer in winter, Tenerife or Lanzarote?', a: `Almost the same. In January southern Tenerife averages ${h.hi('tenerife', 1)} by day and Lanzarote ${h.hi('lanzarote', 1)}; the sea is ${h.sea('tenerife', 1)} and ${h.sea('lanzarote', 1)}. Lanzarote has a little more rain, ${h.wet('lanzarote', 1)} against ${h.wet('tenerife', 1)}. Use the tool above to check any other month.` },
+  { q: 'Is Cyprus or Turkey better in October?', a: `Cyprus is warmer and drier: Larnaca averages ${h.hi('larnaca', 10)} with ${h.wet('larnaca', 10)} of rain, Antalya ${h.hi('antalya', 10)} with ${h.wet('antalya', 10)}. The sea is the same, ${h.sea('larnaca', 10)} and ${h.sea('antalya', 10)}. Antalya's October rain usually comes in heavy storms, so many days stay dry and sunny.` },
+  { q: 'Can I compare the sea temperature of two places?', a: `Yes. Pick two places and a month in the tool: the sea surface temperature comes from NOAA's OISST analysis, the nearest sea cell to each place, averaged over 1991 to 2020. Inland places, such as Marrakech or Orlando, show "inland".` },
+  { q: 'Why does one place show no usable record?', a: `Some stations in the public NOAA archive report a value on too few days. We publish a monthly figure only when at least ten years have a near-complete month, so a missing figure means the record is too thin, not that the month is dry or mild.` },
+];
+const jsonLd = [webApplicationSchema({ name: 'Compare holiday weather', description, path, lang }), webPageSchema({ name: 'Compare holiday weather', description, path, lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Compare two places', path }]), faqSchema(faqs, lang)];
+const sources = ['ghcn', 'ghcn_files', 'oisst', 'wmo_normals'].map((k) => ({ name: SOURCES[k].label, url: SOURCES[k].url }));
+const related = [['tenerife', 'Tenerife weather by month'], ['larnaca', 'Cyprus weather by month'], ['phuket', 'Phuket weather by month']].map(([id, name]) => ({ href: route(id, lang), name, description: '' }));
+---
+<PageLayout title={title} description={description} lang={lang} jsonLd={jsonLd} faqs={faqs} related={related} sources={sources} breadcrumbs={[{ label: 'Compare two places' }]}>
+  <article>
+    <header class="mb-4"><h1 class="font-serif text-[1.75rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">Compare holiday weather</h1></header>
+    <p class="mb-4 text-base text-navy-700 sm:text-lg">Compare holiday weather for any two of our {h.total} places in the same month: in January, Tenerife averages {h.hi('tenerife', 1)} by day against {h.hi('hurghada', 1)} in Hurghada, but the Red Sea is {h.sea('hurghada', 1)} and the Atlantic {h.sea('tenerife', 1)}.</p>
+    <div data-outil class="mb-4"><div data-chrome><ClimateTool client:load mode="compare" place="tenerife" other="majorca" idPrefix="cmp" links={toolLinks()} methodHref={route('method', lang)} /></div></div>
+    <p class="mb-6 text-sm text-navy-600">Independent site: {AUTHOR_NAME} sells no holidays · <a href={route('method', lang)} class="underline hover:text-navy-900">Data and method</a></p>
+    <div class="prose prose-slate max-w-none prose-headings:font-serif">
+      <h2>Compare holiday weather: pairs people weigh up</h2>
+      <p>Most holiday choices come down to two places. A family that has been to Tenerife wonders whether Lanzarote would be any warmer; a couple torn between Cyprus and Turkey for October half-term wants to know which is drier; someone booking Christmas sun asks whether Egypt beats the Canaries. The table below sets out eight such pairs for the month in which the question is usually asked. Each figure is a monthly average over 1991 to 2020, computed from the daily records of a named weather station, and the sea is the nearest cell of NOAA's sea surface analysis.</p>
+      <Fragment set:html={h.table(['Month', 'Places', 'Daytime high', 'Sea', 'Wet days'], rows, 'Averages 1991 to 2020. Wet day: 1 mm of rain or more.')} />
+      <h2>What the differences mean</h2>
+      <p>A gap of one degree in the daytime high is smaller than the difference between two days of the same week, so treat two places within a degree as equal. A gap of three degrees or more is real and you will feel it. The sea moves more slowly than the air: it lags by about a month behind it in the Mediterranean, which is why October water off Cyprus, {h.sea('larnaca', 10)}, is warmer than June water, {h.sea('larnaca', 6)}, while the air is cooler. Wet days count the days with at least one millimetre of rain; three or four wet days in a month means a week will usually have one damp day at most, while fifteen or more means rain is part of most days.</p>
+      <h2>Night lows and the gap between day and night</h2>
+      <p>Two places with the same afternoon can feel very different after dark. In December, Hurghada and Tenerife are close by day, {h.hi('hurghada', 12)} and {h.hi('tenerife', 12)}, but the desert night falls to {h.lo('hurghada', 12)}, against {h.lo('tenerife', 12)} on the island, where the ocean keeps the air mild. In August, Corfu reaches {h.hi('corfu', 8)} by day yet drops to {h.lo('corfu', 8)}, while Rhodes, a little cooler by day at {h.hi('rhodes', 8)}, stays at {h.lo('rhodes', 8)} at night. For a holiday with young children or without air conditioning, the night figure can matter more than the day.</p>
+      <h2>Limits of a comparison</h2>
+      <p>Each place is one station. Resorts on the other side of an island, or in the hills, can be warmer, cooler or wetter than the station. Averages also hide the spread from year to year; a cool, wet week can happen in the best month. Where a station did not report on enough days, the table says no usable record rather than inventing a figure. Sunshine hours are not shown: the official climate normals that carry them could not be read for this site. The <a href={route('method', lang)}>method page</a> lists every station and rule.</p>
+    </div>
+  </article>
+</PageLayout>

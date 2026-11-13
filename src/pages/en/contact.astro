@@ -1,0 +1,24 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { route } from '../../i18n/routes';
+import { CONTACT_EMAIL } from '../../data/site-config';
+import { contactPageSchema } from '../../lib/seo';
+const lang = 'en';
+const path = route('contact', lang);
+const description = 'Write to Sun by Month about a station, a figure that looks wrong or a holiday place to add. E-mail only: no booking, no holiday sold, nothing passed on to a travel company.';
+---
+<PageLayout title="Contact Sun by Month: report a figure or suggest a place" description={description} lang={lang} noindex={true} jsonLd={[contactPageSchema({ name: 'Contact', description, path, lang })]} breadcrumbs={[{ label: 'Contact' }]} showAuthor={false}>
+  <article class="prose prose-slate max-w-none prose-headings:font-serif">
+    <h1>Contact</h1>
+    <p>By e-mail: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. There is no form and no phone line, and nothing you write is passed on to a travel company or anyone else.</p>
+    <h2>What helps us most</h2>
+    <ul>
+      <li>A figure that looks wrong: name the place, the month and the official source you compared it with.</li>
+      <li>A better station: a GHCN-Daily station closer to a resort, with a longer record.</li>
+      <li>A place to add, with the airport or town you have in mind.</li>
+      <li>Embedding the finder on a travel blog or a school page: the code is on the <a href={route('widget', lang)}>embed page</a>.</li>
+    </ul>
+    <h2>What we cannot do</h2>
+    <p>We do not forecast the weather for your dates, book holidays or give health and safety advice. For live forecasts, use a national weather service; for travel advice, the Foreign, Commonwealth and Development Office.</p>
+  </article>
+</PageLayout>

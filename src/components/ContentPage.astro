@@ -1,0 +1,43 @@
+---
+/** A destination page or a month page: H1, a one-line answer with its figure, the tool at once, the folded summary, the text. */
+import PageLayout from '../layouts/PageLayout.astro';
+import ClimateTool from './calc/ClimateTool';
+import Clamp from './Clamp.astro';
+import { route, ROUTES } from '../i18n/routes';
+import { label, GROUPS } from '../i18n/nav';
+import { pageById } from '../lib/pages';
+import { helpers, SOURCES } from '../lib/helpers';
+import { toolLinks } from '../lib/tool-links';
+import { articleSchema, faqSchema, breadcrumbSchema, webPageSchema, webApplicationSchema } from '../lib/seo';
+import { AUTHOR_NAME } from '../data/site-config';
+import type { PageDef } from '../lib/page-types';
+interface Props { page: PageDef }
+const { page } = Astro.props;
+const lang = 'en';
+const path = route(page.id, lang);
+const group = GROUPS.find((g) => g.id === page.group)!;
+const h = helpers();
+const faqs = page.faqs(h);
+const jsonLd = [webApplicationSchema({ name: page.h1, description: page.description, path, lang }), articleSchema({ title: page.h1, description: page.description, path, lang }), webPageSchema({ name: page.h1, description: page.description, path, lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: page.nav, path }])];
+if (faqs.length) jsonLd.push(faqSchema(faqs, lang));
+const related = page.related.filter((id) => ROUTES.some((r) => r.id === id)).map((id) => ({ href: route(id, lang), name: label(id), description: pageById(id)?.card ?? '' }));
+const sources = page.sources.map((k) => ({ name: SOURCES[k].label, url: SOURCES[k].url }));
+const t = page.tool;
+const homeHref = route('home', lang);
+---
+<PageLayout title={page.title} description={page.description} lang={lang} jsonLd={jsonLd} faqs={faqs} related={related} sources={sources} breadcrumbs={[{ label: group.label, href: homeHref }, { label: page.nav }]}>
+  <article>
+    <header class="mb-4">
+      <h1 class="font-serif text-[1.75rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">{page.h1}</h1>
+    </header>
+    <p class="mb-4 text-base text-navy-700 sm:text-lg"><Fragment set:html={page.intro(h)} /></p>
+    <div data-outil class="mb-4"><div data-chrome>
+      {t.mode === 'place'
+        ? <ClimateTool client:load mode="place" place={t.dest} idPrefix={page.id.slice(0, 8)} links={toolLinks()} methodHref={route('method', lang)} />
+        : <ClimateTool client:load mode="finder" fixedMonth={t.month} idPrefix={page.id.slice(0, 8)} links={toolLinks()} methodHref={route('method', lang)} />}
+    </div></div>
+    <p class="mb-6 text-sm text-navy-600">Independent site: {AUTHOR_NAME} sells no holidays · <a href={route('method', lang)} class="underline hover:text-navy-900">{label('method')}</a> · <a href={route('editorial', lang)} class="underline hover:text-navy-900">Editorial policy</a></p>
+    <Clamp text={page.resume(h)} lang={lang} id={`clamp-${page.id}`} class="mb-8" />
+    <div class="prose prose-slate max-w-none prose-headings:font-serif"><Fragment set:html={page.body(h)} /></div>
+  </article>
+</PageLayout>

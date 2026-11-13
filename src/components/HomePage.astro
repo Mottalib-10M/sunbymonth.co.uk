@@ -1,0 +1,38 @@
+---
+/** Home: the finder first, the folded answer, the year table, the long text, the FAQ. Text: src/content/home.ts. */
+import PageLayout from '../layouts/PageLayout.astro';
+import Clamp from './Clamp.astro';
+import ClimateTool from './calc/ClimateTool';
+import { HOME as x } from '../content/home';
+import { route } from '../i18n/routes';
+import { GROUPS, label } from '../i18n/nav';
+import { PAGES } from '../lib/pages';
+import { helpers, SOURCES } from '../lib/helpers';
+import { toolLinks } from '../lib/tool-links';
+import { AUTHOR_NAME } from '../data/site-config';
+import { faqSchema, organizationSchema, websiteSchema, webPageSchema, webApplicationSchema } from '../lib/seo';
+const lang = 'en';
+const path = route('home', lang);
+const h = helpers();
+const faqs = x.faqs(h);
+const sources = x.sources.map((k) => ({ name: SOURCES[k].label, url: SOURCES[k].url }));
+const jsonLd = [websiteSchema(lang), organizationSchema(lang), webPageSchema({ name: x.h1, description: x.description, path, lang }), webApplicationSchema({ name: x.h1, description: x.description, path, lang }), faqSchema(faqs, lang)];
+---
+<PageLayout title={x.title} description={x.description} lang={lang} jsonLd={jsonLd} faqs={faqs} sources={sources}>
+  <header class="mb-4">
+    <h1 class="font-serif text-[1.75rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">{x.h1}</h1>
+  </header>
+  <p class="mb-4 text-base text-navy-700 sm:text-lg"><Fragment set:html={x.intro(h)} /></p>
+  <div data-outil class="mb-4"><div data-chrome><ClimateTool client:load mode="finder" idPrefix="home" links={toolLinks()} methodHref={route('method', lang)} /></div></div>
+  <p class="mb-6 text-sm text-navy-600">Independent site: {AUTHOR_NAME} sells no holidays · <a href={route('method', lang)} class="underline hover:text-navy-900">{label('method')}</a> · <a href={route('about', lang)} class="underline hover:text-navy-900">About</a></p>
+  <Clamp text={x.resume(h)} lang={lang} id="clamp-home" class="mb-8" />
+  <div class="prose prose-slate max-w-none prose-headings:font-serif"><Fragment set:html={x.body(h)} /></div>
+  <section class="mt-10" data-chrome>
+    <div class="grid gap-8 md:grid-cols-4">
+      {GROUPS.map((g) => (
+        <div><h2 class="font-serif text-xl font-bold text-navy-900">{g.label}</h2>
+          <ul class="mt-3 space-y-2 text-sm">{PAGES.filter((p) => p.group === g.id).map((p) => <li><a href={route(p.id, lang)} class="font-medium text-accent-700 underline-offset-2 hover:underline">{p.nav}</a></li>)}</ul></div>
+      ))}
+    </div>
+  </section>
+</PageLayout>

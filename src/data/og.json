@@ -1,0 +1,13 @@
+{
+ "accent": "#B4530A",
+ "symbol": "°C",
+ "variants": [
+  {
+   "file": "og-en.png",
+   "title": "Where is hot this month?\nHoliday weather, month by month",
+   "subtitle": "Daytime high · sea temperature · wet days · 62 destinations",
+   "badge": "NOAA station records · 1991 to 2020 averages",
+   "brand": "Sun by Month"
+  }
+ ]
+}

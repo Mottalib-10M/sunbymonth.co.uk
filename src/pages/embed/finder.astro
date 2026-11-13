@@ -1,0 +1,23 @@
+---
+/** Embeddable page (iframe): the finder alone. noindex, outside the sitemap. */
+import '../../styles/global.css';
+import ClimateTool from '../../components/calc/ClimateTool';
+import { SITE_URL, SITE_NAMES } from '../../data/site-config';
+import { toolLinks } from '../../lib/tool-links';
+const abs = Object.fromEntries(Object.entries(toolLinks()).map(([k, v]) => [k, `${SITE_URL}${v}`]));
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Where is hot: holiday weather finder (widget)</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={`${SITE_URL}/en/`} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  </head>
+  <body class="bg-white p-2 text-navy-900">
+    <main><ClimateTool client:load mode="finder" idPrefix="embed" links={abs} methodHref={`${SITE_URL}/en/method/`} /></main>
+    <p class="mt-2 text-center text-xs text-navy-600"><a href={`${SITE_URL}/en/`} target="_blank" rel="noopener" class="underline">{SITE_NAMES.en}</a> · averages 1991 to 2020 from NOAA GHCN-Daily and OISST (data provided by the NOAA PSL, Boulder, Colorado, USA, from their website at https://psl.noaa.gov)</p>
+  </body>
+</html>

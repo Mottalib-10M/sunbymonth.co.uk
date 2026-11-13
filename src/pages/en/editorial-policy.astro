@@ -1,0 +1,21 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { route } from '../../i18n/routes';
+import { AUTHOR_NAME } from '../../data/site-config';
+const lang = 'en';
+---
+<PageLayout title="Editorial policy of Sun by Month: NOAA records, no guesswork" description="How Sun by Month writes its holiday weather pages: every figure computed from NOAA station and sea data for 1991 to 2020, with its station named, and no figure without a source." lang={lang} noindex={true} breadcrumbs={[{ label: 'Editorial policy' }]} showAuthor={false}>
+  <article class="prose prose-slate max-w-none prose-headings:font-serif">
+    <h1>Editorial policy</h1>
+    <h2>Where the figures come from</h2>
+    <p>A figure enters the site only when it has been computed from a NOAA dataset: GHCN-Daily for the air and the rain, OISST for the sea. Each place names its station. Travel agents' pages and other weather sites are read to see what readers ask, never to take a number.</p>
+    <h2>How pages are written</h2>
+    <p>No figure is typed into the text. The averages live in one data file built by a script from the downloaded records, and every page reads its figures from it when the site is built. A month without enough data shows <em>no usable record</em>. Statements about a place that the data cannot support are left out.</p>
+    <h2>What we do not write about</h2>
+    <p>Health, vaccinations, safety and travel rules. Those belong to official bodies.</p>
+    <h2>Money</h2>
+    <p>{AUTHOR_NAME} receives nothing from airlines, tour operators or hotels and links to none of them as a sponsor. If advertising is shown, it is labelled and never placed above a tool.</p>
+    <h2>Updates and corrections</h2>
+    <p>Nothing on the site updates by itself. The averages describe 1991 to 2020 and will change only when the files are read again for a new reference period or a better station; the date the files were read is on the <a href={route('method', lang)}>method page</a>. A reported error is checked against the source and, once fixed, the date of the page moves. Write through the <a href={route('contact', lang)}>contact page</a>.</p>
+  </article>
+</PageLayout>

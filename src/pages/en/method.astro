@@ -1,0 +1,39 @@
+---
+/** Method: the sources, the rules that turn daily records into monthly averages, every station, the limits. Figures from the kit. */
+import PageLayout from '../../layouts/PageLayout.astro';
+import { route } from '../../i18n/routes';
+import { helpers } from '../../lib/helpers';
+import { breadcrumbSchema, webPageSchema } from '../../lib/seo';
+const lang = 'en';
+const h = helpers();
+const path = route('method', lang);
+const title = 'Holiday Weather Data and Method: NOAA Stations, 1991-2020';
+const description = 'How the holiday weather averages are built: NOAA GHCN-Daily station records and OISST sea temperature, 1991 to 2020, rules for missing days, every station.';
+const rows = [...h.C.DESTS].sort((a, b) => a.name.localeCompare(b.name)).map((d) => [d.name, d.country, d.station.label, d.station.id, `${Math.min(...d.years.tmax)} to ${Math.max(...d.years.tmax)}`, d.rain.some((v) => v === null) ? `${d.rain.filter((v) => v !== null).length} of 12 months` : `${Math.min(...d.years.rain)} to ${Math.max(...d.years.rain)}`, d.sea ? h.km(d.sea.km) : 'inland']);
+---
+<PageLayout title={title} description={description} lang={lang} jsonLd={[webPageSchema({ name: 'Data and method', description, path, lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Data and method', path }])]} breadcrumbs={[{ label: 'Data and method' }]}>
+  <article class="prose prose-slate max-w-none prose-headings:font-serif">
+    <h1>Holiday weather data and method</h1>
+    <p><strong>Every figure on this site is a monthly average over the thirty years 1991 to 2020, computed by us from public NOAA data: the daily records of one named weather station per place for the air and the rain, and NOAA's sea surface temperature analysis for the sea. No figure is typed by hand, and none is taken from a travel site.</strong></p>
+    <h2>1. Air temperature and rain: GHCN-Daily</h2>
+    <p>The Global Historical Climatology Network daily (<Fragment set:html={h.src('ghcn', 'GHCN-Daily')} />) is NOAA's archive of daily observations from weather stations worldwide, version 3.35. For each place we chose one station, usually the airport serving the resort, and downloaded its file from the <Fragment set:html={h.src('ghcn_files', 'public station files')} /> on 13 November 2026. From each file we keep three elements: the daily maximum temperature, the daily minimum temperature and the daily precipitation, for the years 1991 to 2020. Any value carrying a quality flag is dropped.</p>
+    <p>A month of one year counts for temperature when at least 20 days have a value, and for rain when at least 26 days do, because a missing day would make a rain total too low. The monthly normal is the plain mean of the yearly values; a month backed by fewer than ten years is not published at all, and the page says <em>no usable record</em>. A wet day is a day with at least 1.0 mm of rain, the threshold weather services use. Many stations outside Europe and North America report rain on only some days in the public archive, which is why several places have no rain figure; we prefer a gap to a weak number.</p>
+    <h2>2. Sea temperature: OISST</h2>
+    <p>The sea column is NOAA's Optimum Interpolation Sea Surface Temperature, version 2.1 (<Fragment set:html={h.src('oisst', 'OISST v2.1')} />), which combines satellite, ship and buoy measurements on a grid of a quarter of a degree. We read its monthly long-term mean for 1991 to 2020 and, for each place, take the nearest grid cell over sea. The distance from the place to that cell is in the table below. Data provided by the NOAA PSL, Boulder, Colorado, USA, from their website at https://psl.noaa.gov.</p>
+    <h2>3. Daylight and distance</h2>
+    <p>Daylight is the time from sunrise to sunset on the 15th of the month, computed from the latitude with the standard formula used by the <Fragment set:html={h.src('solcalc', 'NOAA solar calculator')} />. Distance is a straight line from Heathrow, not a flight time.</p>
+    <h2>4. Why 1991 to 2020</h2>
+    <p>It is the current thirty-year reference period of the World Meteorological Organization, used by national weather services for their climate normals (<Fragment set:html={h.src('wmo_normals', 'WMO climate normals')} />). Thirty years smooth out a single hot summer or wet winter. Any single year can run above or below them.</p>
+    <h2>5. Every station</h2>
+    <Fragment set:html={h.table(['Place', 'Country', 'Station', 'GHCN id', 'Years (high)', 'Years (rain)', 'Sea cell'], rows, 'Years: number of years with a near-complete month, lowest and highest over the twelve months.')} />
+    <h2>6. Limits</h2>
+    <ul>
+      <li>One station per place. A resort on the other side of an island, or higher up, can differ by several degrees.</li>
+      <li>Places left out for lack of a GHCN-Daily station within about 60 km with ten years of data: Sharm el-Sheikh, Agadir, Bodrum, Dalaman, Kos, Santorini, Mykonos, Sunny Beach, St Lucia and Florence; and Zante, Paphos and Izmir, whose stations have too many gaps in the daytime high.</li>
+      <li>No sunshine hours: the official WMO normals that carry them could not be downloaded for this site.</li>
+      <li>No forecast and no live data: the figures do not change with the weather of this year.</li>
+      <li>Storms: the averages show rain, not the risk of a tropical storm. For the Atlantic, see the <Fragment set:html={h.src('nhc', 'National Hurricane Center')} />.</li>
+    </ul>
+    <p>To cite the station data: Menne, M.J. and others (2012), Global Historical Climatology Network - Daily (GHCN-Daily), Version 3, NOAA National Climatic Data Center, <Fragment set:html={h.src('ghcn_doi', 'doi:10.7289/V5D21VHZ')} />. Corrections: <a href={route('contact', lang)}>contact page</a>.</p>
+  </article>
+</PageLayout>

@@ -1,0 +1,17 @@
+{
+  "_lisezmoi": "Sources of every figure on the site. The climate figures themselves are in climate.json, rebuilt by scripts/build-data.py from the raw NOAA files; nothing is typed by hand. Each link was opened on retrieved_at.",
+  "year": 2026,
+  "retrieved_at": "2026-11-13",
+  "period": "1991-2020",
+  "sources": {
+    "ghcn": { "url": "https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily", "label": { "en": "NOAA NCEI: Global Historical Climatology Network daily (GHCN-Daily), version 3.35" } },
+    "ghcn_files": { "url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/", "label": { "en": "NOAA NCEI: GHCN-Daily station files and station list (read on 13 November 2026)" } },
+    "ghcn_readme": { "url": "https://www.ncei.noaa.gov/pub/data/ghcn/daily/readme.txt", "label": { "en": "NOAA NCEI: GHCN-Daily readme, how to cite the dataset" } },
+    "ghcn_doi": { "url": "https://doi.org/10.7289/V5D21VHZ", "label": { "en": "Menne et al. (2012), GHCN-Daily, Version 3, doi:10.7289/V5D21VHZ" } },
+    "oisst": { "url": "https://psl.noaa.gov/data/gridded/data.noaa.oisst.v2.highres.html", "label": { "en": "NOAA PSL: OISST v2.1 sea surface temperature, monthly long-term mean 1991-2020" } },
+    "oisst_ncei": { "url": "https://www.ncei.noaa.gov/products/optimum-interpolation-sst", "label": { "en": "NOAA NCEI: Optimum Interpolation Sea Surface Temperature, product page" } },
+    "wmo_normals": { "url": "https://www.ncei.noaa.gov/products/wmo-climate-normals", "label": { "en": "NOAA NCEI: WMO climate normals, the 1991-2020 reference period" } },
+    "nhc": { "url": "https://www.nhc.noaa.gov/climo/", "label": { "en": "NOAA National Hurricane Center: tropical cyclone climatology" } },
+    "solcalc": { "url": "https://gml.noaa.gov/grad/solcalc/", "label": { "en": "NOAA Global Monitoring Laboratory: solar calculator, the day-length method" } }
+  }
+}

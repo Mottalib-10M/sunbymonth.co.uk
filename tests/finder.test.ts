@@ -48,3 +48,14 @@ describe('finderView', () => {
     expect(v.groups[0].visible.map((r) => r.d.id)).toContain('tenerife');
   });
 });
+
+describe('beachVerdict', () => {
+  it('follows the finder threshold and never suggests the place itself', async () => {
+    const { beachVerdict, DESTS } = await import('../src/lib/engine/climate');
+    for (const d of DESTS) for (const m of MONTHS) {
+      const v = beachVerdict(d, m);
+      expect(v.beach).toBe(v.high >= DEFAULT_CRITERIA.minHigh);
+      if (v.instead) { expect(v.beach).toBe(false); expect(v.instead.d.id).not.toBe(d.id); expect(v.instead.high).toBeGreaterThanOrEqual(DEFAULT_CRITERIA.minHigh); }
+    }
+  });
+});

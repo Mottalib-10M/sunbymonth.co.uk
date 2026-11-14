@@ -1,0 +1,9 @@
+01 / → /en/
+02 menu ☰ ouvert (rubriques dépliées)
+03 /en/about/
+04 /en/benidorm-weather-by-month/
+05 /en/cancun-weather-by-month/
+06 /en/cape-verde-weather-by-month/
+07 /en/compare-holiday-weather/
+08 /en/corfu-weather-by-month/
+09 /en/crete-weather-by-month/

@@ -98,3 +98,17 @@ export function finderView(m: Month, c: Criteria, expanded = false): FinderView 
 }
 /** Places whose station misses the rain record for at least one month, by name. */
 export const RAIN_GAPS: Dest[] = DESTS.filter((d) => d.rain.some((v) => v === null) || d.wet.some((v) => v === null)).sort((a, b) => a.name.localeCompare(b.name));
+/** Thresholds shown under the finder fields ("24 °C: beach weather", "20 °C: most people swim"). */
+export const SWIM_SEA = 20;
+export interface BeachVerdict { beach: boolean; high: number; sea: number | null; swim: boolean | null; instead: Row | null }
+/**
+ * The month's verdict at the top of a place page (testeurs naïfs du 2026-11-14, tour 2 : "21 °C, is that good
+ * or not?", the answer sat five screens down). Same threshold as the finder default; when the place falls short,
+ * `instead` is the place the home answer names for that month (short haul first), never the place itself.
+ */
+export function beachVerdict(d: Dest, m: Month): BeachVerdict {
+  const h = high(d, m), s = sea(d, m), beach = h >= DEFAULT_CRITERIA.minHigh;
+  const v = finderView(m, DEFAULT_CRITERIA);
+  const alt = v.matched ? (v.near ?? v.far) : null;
+  return { beach, high: h, sea: s, swim: s === null ? null : s >= SWIM_SEA, instead: beach || !alt || alt.d.id === d.id ? null : alt };
+}

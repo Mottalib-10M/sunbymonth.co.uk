@@ -2,7 +2,7 @@
 import { MONTHS } from './engine/climate';
 const nf = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
 export const num = (v: number) => nf.format(v);
-export const NONE = 'no usable record';
+export const NONE = 'not recorded';
 export const deg = (v: number | null) => (v === null ? NONE : `${nf.format(v)} °C`);
 export const mm = (v: number | null) => (v === null ? NONE : `${nf.format(v)} mm`);
 export const days = (v: number | null) => (v === null ? NONE : v === 1 ? '1 day' : `${nf.format(v)} days`);

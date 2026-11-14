@@ -10,7 +10,7 @@ export default definePage({
   resume: (h) => `Antalya is the hub of the Turkish Riviera, with Belek, Side, Kemer and Alanya along the same coast. Our figures come from the Antalya station, averaged over 1991 to 2020. Behind the coast the Taurus mountains rise steeply, and the climate is one of strong contrasts. In summer: July averages ${h.hi(id, 7)} by day and August ${h.hi(id, 8)}, the hottest of the Mediterranean beach resorts on this site. In winter the storms bring heavy rain: ${h.rain(id, 1)} in January and ${h.rain(id, 12)} in December, far more than in Cyprus or Crete. The sea is the warmest of the Mediterranean places we track, ${h.sea(id, 8)} in August and still ${h.sea(id, 10)} in October. For British holidays, the strongest months are May, June, September and October, when the heat is lower and the sea already or still warm.`,
   body: (h) => `
 <h2>Turkey weather by month: Antalya table</h2>
-${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Antalya station; sea surface ${h.seaKm(id)} offshore. Wet day: 1 mm of rain or more.`)}
+${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Antalya station; sea temperature taken ${h.seaKm(id)}. Wet day: 1 mm of rain or more.`)}
 <h2>Turkey in May</h2>
 <p>May is the start of the season: ${h.hi(id, 5)} by day, ${h.lo(id, 5)} at night, and rain on about ${h.wet(id, 5)}. The sea, at ${h.sea(id, 5)}, is warmer than in Majorca at the same time. By June the high jumps to ${h.hi(id, 6)}, and many families prefer the first half of the month before school holidays.</p>
 <h2>Turkey in October</h2>

@@ -10,7 +10,7 @@ export default definePage({
   resume: (h) => `Crete is the largest Greek island and the most southerly of the big holiday islands of the Aegean. Our figures come from Heraklion, on the north coast, where most visitors land, averaged over 1991 to 2020. The summer is long and almost completely dry: from June to August Heraklion records ${h.wet(id, 6)}, ${h.wet(id, 7)} and ${h.wet(id, 8)} of rain a month. July and August reach ${h.hi(id, 7)} by day, tempered on the north coast by the summer north wind, the meltemi. The sea warms late and cools late, ${h.sea(id, 6)} in June, ${h.sea(id, 8)} in August and still ${h.sea(id, 10)} in October, which is why autumn weeks in Crete are popular with swimmers. Winters are mild but wet and grey, with ${h.rain(id, 1)} of rain in January over about ${h.wet(id, 1)}.`,
   body: (h) => `
 <h2>Crete weather by month at Heraklion</h2>
-${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Heraklion station; sea surface ${h.seaKm(id)} off the north coast. Wet day: 1 mm of rain or more.`)}
+${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Heraklion station; sea temperature taken ${h.seaKm(id)}. Wet day: 1 mm of rain or more.`)}
 <h2>Crete in May and in October</h2>
 <p>The two shoulder months are close mirror images in the air, ${h.hi(id, 5)} in May against ${h.hi(id, 10)} in October, but not in the water: the sea is ${h.sea(id, 5)} in May and ${h.sea(id, 10)} in October, because it takes all summer to warm. May is the drier of the two, with ${h.wet(id, 5)} of rain against ${h.wet(id, 10)}. For a swim-first holiday choose October; for walking the gorges in green landscape, May.</p>
 <h2>Best time to visit Crete</h2>

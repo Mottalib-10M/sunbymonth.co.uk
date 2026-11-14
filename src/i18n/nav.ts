@@ -7,7 +7,8 @@ export const GROUPS: Array<{ id: Group; label: string }> = [
   { id: 'months', label: 'Where is hot, by month' },
   { id: 'iberia', label: 'Canaries, Spain, Portugal' },
   { id: 'med', label: 'Greece, Cyprus, Turkey, Malta' },
-  { id: 'long', label: 'North Africa and long haul' },
+  { id: 'mideast', label: 'Egypt, Morocco, Dubai' },
+  { id: 'long', label: 'Long haul' },
 ];
 export const label = (id: string, _lang?: Locale) => CORE[id] ?? pageById(id)?.nav ?? id;
 const link = (id: string, lang: Locale): NavLink => ({ href: route(id, lang), label: label(id) });

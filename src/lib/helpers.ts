@@ -3,7 +3,14 @@ import { route, ROUTES } from '../i18n/routes';
 import type { Helpers } from './page-types';
 import { KIT } from './kit';
 import P from '../data/params-2026.json';
-const esc = (s: string | number) => String(s).replace(/&(?!(?:[a-z]+|#\d+);)/g, '&amp;').replace(/</g, '&lt;');
+import { toolLinks } from './tool-links';
+import type { Dest } from './engine/climate';
+const esc0 = (s: string | number) => String(s).replace(/&(?!(?:[a-z]+|#\d+);)/g, '&amp;').replace(/</g, '&lt;');
+/** A cell may carry links to our own pages (place names), nothing else. */
+const esc = (s: string | number) => { const t = String(s); const bare = t.replace(/<a href="\/[^"<>]*">[^<]*<\/a>/g, ''); return bare === t || /</.test(bare) ? esc0(t) : t; };
+const LINKS = toolLinks();
+/** A place name, linked to its page when it has one. */
+export const placeName = (d: Dest) => (LINKS[d.id] ? `<a href="${LINKS[d.id]}">${d.name}</a>` : d.name);
 export const SOURCES: Record<string, { url: string; label: string }> = Object.fromEntries(Object.entries(P.sources).map(([k, v]) => [k, { url: v.url, label: v.label.en }]));
 export function table(headers: string[], rows: Array<Array<string | number>>, caption?: string, align: Array<'l' | 'r'> = []) {
   const al = (i: number) => (align[i] === 'r' ? 'text-right' : 'text-left');
@@ -12,5 +19,5 @@ export function table(headers: string[], rows: Array<Array<string | number>>, ca
 export const ext = (url: string, text: string) => `<a href="${url}" target="_blank" rel="nofollow noopener noreferrer">${text}</a>`;
 export function link(id: string, text: string) { if (!ROUTES.some((r) => r.id === id)) throw new Error(`Unknown page id in link: ${id}`); return `<a href="${route(id, 'en')}">${text}</a>`; }
 export function helpers(): Helpers {
-  return { ...KIT, a: link, table, src: (key: string, text?: string) => { const s = SOURCES[key]; if (!s) throw new Error(`Unknown source ${key}`); return ext(s.url, text ?? s.label); } };
+  return { ...KIT, a: link, table, place: placeName, src: (key: string, text?: string) => { const s = SOURCES[key]; if (!s) throw new Error(`Unknown source ${key}`); return ext(s.url, text ?? s.label); } };
 }

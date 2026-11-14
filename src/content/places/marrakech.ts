@@ -1,7 +1,7 @@
 import { definePage } from '../../lib/page-types';
 const id = 'marrakech';
 export default definePage({
-  id, group: 'long', order: 42, slug: 'marrakech-weather-by-month', nav: 'Marrakech (Morocco)', card: 'Warm winter days and cold nights, a fine spring, and a summer near 38 °C',
+  id, group: 'mideast', order: 42, slug: 'marrakech-weather-by-month', nav: 'Marrakech (Morocco)', card: 'Warm winter days and cold nights, a fine spring, and a summer near 38 °C',
   title: 'Marrakech Weather by Month: Morocco Highs, Rain and Heat',
   description: 'Marrakech weather by month at Menara, 1991 to 2020: daytime highs, summer night lows, rain and wet days, from NOAA station records, with a month tool.',
   h1: 'Marrakech weather by month',
@@ -10,7 +10,7 @@ export default definePage({
   resume: (h) => `Marrakech lies inland on the plain at the foot of the High Atlas, and its climate is semi-arid: hot, dry summers and mild, sunny winters. Our figures come from the Menara airport station, averaged over 1991 to 2020. In winter, the afternoon is pleasant, ${h.hi(id, 12)} in December and ${h.hi(id, 1)} in January, which explains the city's appeal for a short break from Britain. Spring warms quickly, ${h.hi(id, 3)} in March and ${h.hi(id, 4)} in April, and those are also the months with the most rain, about ${h.rain(id, 4)} in April. From June to August the heat is intense, ${h.hi(id, 6)}, ${h.hi(id, 7)} and ${h.hi(id, 8)}, and the souks feel hotter still. Being inland, the city has no sea of its own; for the beach, the coast at Agadir or Essaouira means a long transfer. The station's winter night lows are too patchy in the public archive to show.`,
   body: (h) => `
 <h2>Marrakech weather by month at Menara</h2>
-${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Marrakech Menara station. Inland city: no sea. Night lows from September to March: no usable record. Wet day: 1 mm of rain or more.`)}
+${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Marrakech Menara station. Inland city: no sea. Night lows from September to March: not recorded often enough. Wet day: 1 mm of rain or more.`)}
 <h2>Marrakech in winter</h2>
 <p>From November to February the afternoon averages ${h.hi(id, 11)}, ${h.hi(id, 12)}, ${h.hi(id, 1)} and ${h.hi(id, 2)}, a few degrees warmer than ${h.a('malaga', 'Malaga')} across the strait. Rain comes on about ${h.wet(id, 12)} in December. For a winter break built around walking the medina, gardens and day trips to the Atlas, these figures are comfortable. They are not beach figures; for a warm sea in winter, the ${h.a('tenerife', 'Canaries')} or the ${h.a('hurghada', 'Red Sea')} are the options.</p>
 <h2>When to avoid the heat</h2>

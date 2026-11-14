@@ -1,7 +1,7 @@
 import { definePage } from '../../lib/page-types';
 const id = 'hurghada';
 export default definePage({
-  id, group: 'long', order: 41, slug: 'egypt-weather-by-month', nav: 'Egypt (Hurghada)', card: 'Winter sun with a warm sea, dry all year; summer heat is fierce',
+  id, group: 'mideast', order: 41, slug: 'egypt-weather-by-month', nav: 'Egypt (Hurghada)', card: 'Winter sun with a warm sea, dry all year; summer heat is fierce',
   title: 'Egypt Weather by Month: Hurghada Highs and Red Sea Water',
   description: 'Egypt weather by month on the Red Sea at Hurghada, 1991 to 2020: daytime highs, night lows, sea temperature and rain, with a tool to check any one month.',
   h1: 'Egypt weather by month',
@@ -10,7 +10,7 @@ export default definePage({
   resume: (h) => `For British holidaymakers, Egypt usually means the Red Sea coast, at Hurghada, El Gouna or Sharm el-Sheikh, and our figures come from the Hurghada station, averaged over 1991 to 2020. This is desert: rain is so rare that no month averages even one wet day. The appeal is in winter, when the coast is the closest place to Britain with both a warm day and a warm sea. December averages ${h.hi(id, 12)}, January ${h.hi(id, 1)} and February ${h.hi(id, 2)}, while the water stays between ${h.seaMin(id)} and ${h.sea(id, 12)}. Desert nights are cool in winter, ${h.lo(id, 1)} in January, so evenings need a jumper. Summer is hard heat: ${h.hi(id, 7)} in July and ${h.hi(id, 8)} in August, with a sea of ${h.sea(id, 8)}. Sharm el-Sheikh, further south in Sinai, has a similar pattern; the station we use is in Hurghada.`,
   body: (h) => `
 <h2>Egypt weather by month at Hurghada</h2>
-${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Hurghada station; Red Sea surface ${h.seaKm(id)} offshore. Wet day: 1 mm of rain or more.`)}
+${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Hurghada station; Red Sea temperature taken ${h.seaKm(id)}. Wet day: 1 mm of rain or more.`)}
 <h2>Egypt in December and January</h2>
 <p>These two months are the most searched for a reason. At ${h.hi(id, 12)} and ${h.hi(id, 1)} by day, the Red Sea coast is about as warm by day as ${h.a('tenerife', 'Tenerife')}, at ${h.hi('tenerife', 1)} in January, but its sea is clearly warmer: ${h.sea(id, 1)} against ${h.sea('tenerife', 1)}. The flight is longer. The wind off the sea is often fresh, and the nights, ${h.lo(id, 12)} and ${h.lo(id, 1)}, are cooler than in the Canaries, so the pool can feel cold early in the morning.</p>
 <h2>Best time to visit the Red Sea</h2>

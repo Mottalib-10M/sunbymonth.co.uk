@@ -10,7 +10,7 @@ export default definePage({
   resume: (h) => `Rhodes is the largest of the Dodecanese islands, close to the Turkish coast in the south-east Aegean. Its position gives it warmer nights and a warmer sea than the Greek islands further west. Our figures come from the Rhodes station, averaged over 1991 to 2020. In summer the afternoon reaches ${h.hi(id, 7)} in July and ${h.hi(id, 8)} in August, and the night stays at ${h.lo(id, 8)}, several degrees warmer than in Corfu. The sea rises from ${h.sea(id, 5)} in May to ${h.sea(id, 8)} in August and stays at ${h.sea(id, 10)} in October. Spring and autumn are gentle, ${h.hi(id, 4)} in April and ${h.hi(id, 11)} in November. The Rhodes station in NOAA's daily archive does not report rain on enough days for a reliable monthly total, so this page shows temperature and sea only.`,
   body: (h) => `
 <h2>Rhodes weather by month: highs, lows and sea</h2>
-${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Rhodes station; sea surface ${h.seaKm(id)} offshore. Rain: no usable record in the public daily data.`)}
+${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Rhodes station; sea temperature taken ${h.seaKm(id)}. Rain: not recorded often enough in the public daily data, so no figure is shown.`)}
 <h2>Warm evenings</h2>
 <p>What sets Rhodes apart is the night. From June to September the low stays at ${h.lo(id, 6)}, ${h.lo(id, 7)}, ${h.lo(id, 8)} and ${h.lo(id, 9)}, against ${h.lo('corfu', 8)} in Corfu in August. Dinner outside without a layer is the norm from June to early October. In winter the island is mild too, with nights around ${h.lo(id, 1)} in January.</p>
 <h2>Best time to visit Rhodes</h2>
@@ -18,7 +18,7 @@ ${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Day
   faqs: (h) => [
     { q: 'Is Rhodes warm in October?', a: `Yes, October is one of the most pleasant months: the average high is ${h.hi(id, 10)}, the low ${h.lo(id, 10)}, and the sea ${h.sea(id, 10)}, warmer than in June. By November the high falls to ${h.hi(id, 11)}. It is a good month for a late beach week.` },
     { q: 'How hot does Rhodes get in August?', a: `The August average high is ${h.hi(id, 8)} and the average low ${h.lo(id, 8)}, over 1991 to 2020. Heatwaves push individual days well above that, so the hottest hours are best spent in the shade or the sea, which averages ${h.sea(id, 8)}.` },
-    { q: 'Why is there no rain figure for Rhodes?', a: `The Rhodes station in NOAA's GHCN-Daily archive reports rain on too few days each month in 1991 to 2020 to give a reliable total. Rather than show a figure based on a handful of years, the table says no usable record.` },
+    { q: 'Why is there no rain figure for Rhodes?', a: `The Rhodes station in the public daily archive of NOAA, the US government agency for weather and oceans, reports rain on too few days each month in 1991 to 2020 to give a reliable total. Rather than show a figure based on a handful of years, the table says not recorded.` },
   ],
   related: ['crete', 'antalya', 'corfu', 'october'],
   sources: ['ghcn', 'ghcn_files', 'oisst', 'wmo_normals'],

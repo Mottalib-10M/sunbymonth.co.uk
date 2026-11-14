@@ -92,6 +92,7 @@ h1 { font-weight: 700; } h2 { font-weight: 650; } h3 { font-weight: 600; }
 .prose table, table.journal { font-variant-numeric: tabular-nums; border-collapse: collapse; }
 .prose thead th, table.journal thead th { font-variant: small-caps; letter-spacing: .02em; border-bottom: 1px solid var(--color-navy-300); background: transparent; }
 .prose td, .prose th, table.journal td, table.journal th { border-left: 0; border-right: 0; }
+table.journal a { color: var(--color-accent-700); text-decoration: underline; text-underline-offset: 2px; } /* noms de lieux liés (testeurs naïfs du 2026-11-14) : not-prose retirait le soulignement */
 
 /* Résumé replié (Clamp.astro, RECETTE §26 et testeurs naïfs du 2026-11-08) : UN <p> dans le HTML ;
    l'écran montre au moins deux phrases entières, « Lire tout le paragraphe » déplie la suite sans

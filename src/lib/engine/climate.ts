@@ -67,3 +67,34 @@ export function seaMonths(d: Dest, t: number): Month[] {
 export function hottest(m: Month, n = DESTS.length): Dest[] { return [...DESTS].sort((a, b) => at(b.tmax, m) - at(a.tmax, m)).slice(0, n); }
 /** Destinations within a distance of London, sorted by daytime high for a month. */
 export function hottestWithin(m: Month, km: number, n = 5): Dest[] { return hottest(m).filter((d) => d.km_from_london <= km).slice(0, n); }
+
+/** Short haul = within this straight-line distance of London; the home sentence and the finder share it. */
+export const SHORT_HAUL_KM = 3500;
+/** The finder's wishes before the reader changes anything: the home sentence is computed with the same ones. */
+export const DEFAULT_CRITERIA: Criteria = { minHigh: 24, minSea: null, maxWet: null, maxKm: null };
+/** How many places each list (short haul, long haul) shows before "Show all". */
+export const FINDER_PREVIEW = 4;
+export interface FinderGroup { key: 'near' | 'far'; rows: Row[]; visible: Row[] }
+export interface FinderView { count: number; matched: boolean; near: Row | null; far: Row | null; groups: FinderGroup[]; hidden: number }
+/**
+ * What the finder shows, as data, so that the count, the list and the answer sentence cannot drift apart
+ * (testeurs naïfs du 2026-11-14 : « 25 of 62 places match » with 8 shown, and Tenerife, named as the answer,
+ * absent from the list because the list was the 8 warmest overall). The list is split in two, short haul and long
+ * haul, each led by the place the answer names; `count` is the number of places the reader can reach with
+ * "Show all", and `hidden` the number still folded. When nothing matches, the warmest places are listed instead.
+ */
+export function finderView(m: Month, c: Criteria, expanded = false): FinderView {
+  const all = rank(m, c);
+  const ok = all.filter((r) => r.ok);
+  const matched = ok.length > 0;
+  const pool = matched ? ok : all.slice(0, 2 * FINDER_PREVIEW);
+  const group = (key: 'near' | 'far'): FinderGroup => {
+    const rows = pool.filter((r) => (key === 'near' ? r.d.km_from_london <= SHORT_HAUL_KM : r.d.km_from_london > SHORT_HAUL_KM));
+    return { key, rows, visible: expanded ? rows : rows.slice(0, FINDER_PREVIEW) };
+  };
+  const groups = [group('near'), group('far')];
+  const shown = groups.reduce((s, g) => s + g.visible.length, 0);
+  return { count: pool.length, matched, near: groups[0].rows[0] ?? null, far: groups[1].rows[0] ?? null, groups, hidden: pool.length - shown };
+}
+/** Places whose station misses the rain record for at least one month, by name. */
+export const RAIN_GAPS: Dest[] = DESTS.filter((d) => d.rain.some((v) => v === null) || d.wet.some((v) => v === null)).sort((a, b) => a.name.localeCompare(b.name));

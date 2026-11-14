@@ -5,12 +5,12 @@ export default definePage({
   title: 'Benidorm Weather by Month: Costa Blanca Highs, Sea, Rain',
   description: 'Benidorm weather by month from the nearest long-running station in Alicante, 1991 to 2020: daytime highs, sea temperature, rain and wet days, with a tool.',
   h1: 'Benidorm weather by month',
-  intro: (h) => `Benidorm weather by month, from the Alicante station 40 km down the coast: ${h.hi(id, 1)} by day in January, ${h.hi(id, 8)} in August, and only ${h.wet(id, 7)} of rain in July.`,
+  intro: (h) => `Benidorm weather by month, from the Alicante station 40 km down the coast: ${h.hi(id, 1)} by day in January, ${h.hi(id, 8)} in August, and July is almost dry, ${h.rain(id, 7)} of rain in the month.`,
   tool: { mode: 'place', dest: id },
   resume: (h) => `Benidorm has no long-running station in the NOAA archive, so this page uses the closest one with a full record over 1991 to 2020: Alicante, on the same Costa Blanca coast about forty kilometres to the south-west. The two towns share the same sea and the same shelter from the mountains inland, and Alicante's figures are a sound guide to Benidorm's beaches. The Costa Blanca is one of the driest parts of Spain. The daytime high goes from ${h.hi(id, 1)} in January to ${h.hi(id, 8)} in August, and the whole year brings about ${h.rainYear(id)} of rain, much of it in a few autumn storms. Winters are mild and bright enough that long-stay visitors from Britain spend months there. The sea goes from ${h.sea(id, 2)} in February to ${h.sea(id, 8)} in August.`,
   body: (h) => `
 <h2>Benidorm weather by month, 1991 to 2020</h2>
-${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Alicante (city) station for air and rain, about 40 km from Benidorm; sea surface ${h.seaKm(id)} offshore of the station. Wet day: 1 mm of rain or more.`)}
+${h.table(['Month', 'Daytime high', 'Night low', 'Sea', 'Rain', 'Wet days', 'Daylight'], h.table12(id), `Alicante (city) station for air and rain, about 40 km from Benidorm; sea temperature taken ${h.seaKm(id)}. Wet day: 1 mm of rain or more.`)}
 <h2>Winter in Benidorm: mild, not warm</h2>
 <p>A winter month in Benidorm is a good deal kinder than one at home, but it is not beach weather. January averages ${h.hi(id, 1)} by day and ${h.lo(id, 1)} at night, with ${h.wet(id, 1)} of rain; the sea, ${h.sea(id, 1)}, is for the brave. What makes the Costa Blanca popular in winter is the light and the dryness: few grey days, low rainfall and short spells of rain. For a winter stay that includes swimming in the sea, the ${h.a('tenerife', 'Canary Islands')} are warmer by about five degrees in both the air and the water.</p>
 <p>Spring arrives early here. By ${h.month(4)} the daytime high is ${h.hi(id, 4)}, a couple of degrees ahead of ${h.a('majorca', 'Majorca')}.</p>

@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import NumberField from '../ui/NumberField';
 import SelectField from '../ui/SelectField';
-import { DESTS, MONTHS, SHORT_HAUL_KM, dest, finderView, beachVerdict, SWIM_SEA, DEFAULT_CRITERIA, high, low, sea, rain, wet, daylight, prev, next, type Criteria, type Row as FRow } from '../../lib/engine/climate';
+import { DESTS, MONTHS, SHORT_HAUL_KM, dest, finderView, beachVerdict, isRainy, RAINY_WET, SWIM_SEA, DEFAULT_CRITERIA, high, low, sea, rain, wet, daylight, prev, next, type Criteria, type Row as FRow } from '../../lib/engine/climate';
 import { deg, mm, days, km, hm, month as mName } from '../../lib/fmt';
 import { readParams, num, str, updateURL } from '../../lib/url-state';
 declare const __BUILD_DAY__: string;
@@ -47,7 +47,7 @@ export default function ClimateTool({ mode, fixedMonth, place, other, idPrefix =
 
   if (mode === 'finder') {
     const c: Criteria = { minHigh, minSea: minSea || null, maxWet: maxWet || null, maxKm: maxKm || null };
-    const v = useMemo(() => finderView(m, c, all), [m, minHigh, minSea, maxWet, maxKm, all]);
+    const v = useMemo(() => finderView(m, c, all, (id) => id in links), [m, minHigh, minSea, maxWet, maxKm, all]);
     // Places without a page are plain text with a "no page yet" tag (testeurs naïfs, tour 2 : bold Goa looked like a link).
     const name = (r: FRow, tag = true) => (links[r.d.id] ? <a href={links[r.d.id]} className="font-semibold text-accent-700 underline">{r.d.name}</a> : <span className="text-navy-900">{r.d.name}{tag && <> <span className="text-xs text-navy-600">(no page yet)</span></>}</span>);
     const pick = (r: FRow | null) => r && <>{name(r, false)} ({deg(r.high)})</>;
@@ -65,7 +65,7 @@ export default function ClimateTool({ mode, fixedMonth, place, other, idPrefix =
           <p className="text-sm font-medium text-navy-600">{mName(m)}, averages 1991 to 2020</p>
           <p className="mt-1 text-3xl font-bold text-navy-900">{v.matched ? v.count : 0} of {DESTS.length} places match</p>
           {v.matched
-            ? <p data-reponse className="mt-1 text-base text-navy-800">{v.near ? <>Warmest within {km(SHORT_HAUL_KM)} of London: {pick(v.near)}.</> : <>None within {km(SHORT_HAUL_KM)} of London.</>} {v.far ? <>Further away: {pick(v.far)}.</> : <>None further away.</>}</p>
+            ? <p data-reponse className="mt-1 text-base text-navy-800">{v.near ? <>Top pick within {km(SHORT_HAUL_KM)} of London: {pick(v.near)}.</> : <>None within {km(SHORT_HAUL_KM)} of London.</>} {v.far ? <>Further away: {pick(v.far)}.</> : <>None further away.</>}</p>
             : <p data-reponse className="mt-1 text-sm font-semibold text-amber-800">None passes every wish. The warmest places of the month are listed instead.</p>}
           {v.groups.filter((g) => g.rows.length).map((g) => (
             <div key={g.key} className="mt-3">
@@ -73,12 +73,12 @@ export default function ClimateTool({ mode, fixedMonth, place, other, idPrefix =
               <ul data-liste className="mt-1 divide-y divide-navy-100 text-sm">{g.visible.map((r) => (
                 <li key={r.d.id} data-lieu={r.d.id} className="py-1.5">
                   <span className="block">{name(r)}</span>
-                  <span className="tabular-nums block text-navy-700">Air high {deg(r.high)} · Sea {r.d.sea ? deg(r.sea) : 'none (inland)'} · Wet days {r.wet === null ? 'not recorded' : r.wet}</span>
+                  <span className="tabular-nums block text-navy-700">Air high {deg(r.high)} · Sea {r.d.sea ? deg(r.sea) : 'none (inland)'} · Wet days {r.wet === null ? 'not recorded' : r.wet}{isRainy(r.wet) && <strong className="font-semibold text-amber-800"> · rainy month</strong>}</span>
                 </li>))}</ul>
             </div>
           ))}
           {(v.hidden > 0 || all) && <button type="button" onClick={() => setAll(!all)} aria-expanded={all} className="mt-3 inline-flex h-12 items-center rounded-lg border border-navy-300 px-4 text-sm font-semibold text-navy-900 hover:bg-navy-50">{all ? 'Show fewer places' : `Show all ${v.count} places`}</button>}
-          <p className="mt-2 text-xs text-navy-600">Typical month, not a forecast. "Wet days not recorded": the station has no reliable rain record for that month, so the place is left out when you set a wet-day limit. <a href={methodHref} className="underline">How the figures are made</a>.</p>
+          <p className="mt-2 text-xs text-navy-600">Typical month, not a forecast. Places with a page and a full rain record come first; a rainy month ({RAINY_WET} wet days or more) goes last. "Wet days not recorded": the station has no reliable rain record for that month, so the place is left out when you set a wet-day limit. <a href={methodHref} className="underline">How the figures are made</a>.</p>
         </div>
       </div>
     );
@@ -105,12 +105,13 @@ export default function ClimateTool({ mode, fixedMonth, place, other, idPrefix =
       <div data-resultat aria-live="polite" className={box}>
         <p className="text-sm font-medium text-navy-600">{A.name} in {mName(m)}, daytime high</p>
         <p className="mt-1 text-3xl font-bold text-navy-900">{deg(high(A, m))}{B && <span className="ml-2 text-lg font-semibold text-navy-700">vs {deg(high(B, m))} in {B.name}</span>}</p>
-        {mode === 'place' && (() => { const bv = beachVerdict(A, m), mn = mName(m), need = deg(DEFAULT_CRITERIA.minHigh);
-          const title = A.sea ? (bv.beach ? `Warm enough for the beach in ${mn}` : bv.high >= 20 ? `Fine for sightseeing, too cool for the beach in ${mn}` : `Too cool for the beach in ${mn}`) : (bv.beach ? `Warm in ${mn}` : bv.high >= 20 ? `Fine for sightseeing in ${mn}, not warm` : `Cool in ${mn}`);
-          return <p data-verdict className={`mt-2 rounded-lg p-3 text-base ${bv.beach ? 'bg-accent-50 text-navy-900' : 'bg-amber-50 text-amber-900'}`}>
+        {mode === 'place' && (() => { const bv = beachVerdict(A, m, (id) => id in links), mn = mName(m), need = deg(DEFAULT_CRITERIA.minHigh);
+          const title = A.sea ? (bv.beach ? `Warm enough for the beach in ${mn}${bv.rainy ? ', but rainy' : ''}` : bv.high >= 20 ? `Fine for sightseeing, too cool for the beach in ${mn}` : `Too cool for the beach in ${mn}`) : (bv.beach ? `Warm in ${mn}${bv.rainy ? ', but rainy' : ''}` : bv.high >= 20 ? `Fine for sightseeing in ${mn}, not warm` : `Cool in ${mn}`);
+          return <p data-verdict className={`mt-2 rounded-lg p-3 text-base ${bv.beach && !bv.rainy ? 'bg-accent-50 text-navy-900' : 'bg-amber-50 text-amber-900'}`}>
             <strong className="font-semibold">{title}</strong> (beach weather: {need} or more by day).
             {bv.sea !== null && <> Sea {deg(bv.sea)}: {bv.swim ? 'warm enough for most people to swim.' : `too cool for most swimmers (${deg(SWIM_SEA)}).`}</>}
-            {bv.instead && <> Warmer this month: {links[bv.instead.d.id] ? <a href={links[bv.instead.d.id]} className="font-semibold underline">{bv.instead.d.name}</a> : bv.instead.d.name} ({deg(bv.instead.high)}).</>}
+            {bv.wet === null ? <> No reliable rain record for {mn}.</> : bv.rainy ? <> Rain on {bv.wet} days in {mn}: a rainy month, expect showers.</> : null}
+            {bv.instead && <> {bv.beach ? 'Drier' : 'Warmer'} this month: {links[bv.instead.d.id] ? <a href={links[bv.instead.d.id]} className="font-semibold underline">{bv.instead.d.name}</a> : bv.instead.d.name} ({deg(bv.instead.high)}).</>}
           </p>; })()}
         <table className={`mt-3 w-full text-sm${B ? ' empile' : ''}`}>
           {B && <thead><tr className="text-left text-navy-600"><th className="py-1 font-medium"><span className="sr-only">Measure</span></th><th className="py-1 text-right font-medium">{A.name}</th><th className="py-1 pl-3 text-right font-medium">{B.name}</th></tr></thead>}

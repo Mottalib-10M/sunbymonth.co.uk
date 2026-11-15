@@ -1,5 +1,6 @@
 /** Everything a page says in figures, from the engine. No climate figure is typed into a page. */
 import * as C from './engine/climate';
+import { toolLinks } from './tool-links';
 import { deg, mm, days, km, hm, month, monthList, span, num, NONE } from './fmt';
 const D = C.dest;
 export type Namer = (d: C.Dest) => string;
@@ -67,9 +68,10 @@ export const KIT = {
   },
   /** The home answer: the first place of each list of the finder, same month, same default wishes (C.finderView). */
   answer(m: number): string {
-    const v = C.finderView(m, C.DEFAULT_CRITERIA);
+    const links = toolLinks();
+    const v = C.finderView(m, C.DEFAULT_CRITERIA, false, (id) => id in links);
     const p = (r: C.Row | null) => (r ? `${r.d.name} (${deg(r.high)})` : 'none');
-    return `in ${month(m)} the warmest short-haul choice is ${p(v.near)}; long haul, ${p(v.far)}`;
+    return `in ${month(m)} the top short-haul pick is ${p(v.near)}; long haul, ${p(v.far)}`;
   },
   /** Names of the places with at least one month without a rain record. */
   rainGaps: () => C.RAIN_GAPS.map((d) => d.name).join(', ').replace(/, ([^,]*)$/, ' and $1'),

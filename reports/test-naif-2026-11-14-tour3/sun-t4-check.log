@@ -1,0 +1,124 @@
+
+> sunbymonth.co.uk@0.1.0 check
+> npm run build && npx vitest run && node scripts/typo-nbsp.mjs dist --check && node scripts/check-legal.mjs && python3 scripts/check-seo.py . && python3 scripts/check-unique.py . && python3 scripts/check-trame.py . && python3 scripts/check-liens.py . && node scripts/check-layout.mjs . && node scripts/check-sources.mjs . && python3 scripts/check-simulateurs.py . && python3 scripts/check-hreflang.py . && python3 scripts/check-anglais.py . && python3 scripts/check-portefeuille.py . && python3 scripts/check-cookies.py . && node scripts/check-url-propre.mjs . && node scripts/check-premier-ecran.mjs . && node scripts/check-droits.mjs . && node scripts/check-copie.mjs . && node scripts/check-nombres.mjs . && node scripts/check-contraste.mjs . && node scripts/check-saisie.mjs . && python3 scripts/check-regles.py . && python3 scripts/check-motcle.py .
+
+
+> sunbymonth.co.uk@0.1.0 build
+> astro build && node scripts/typo-nbsp.mjs && python3 scripts/check-snippets.py dist
+
+11:49:43 [types] Generated 123ms
+11:49:43 [build] output: "static"
+11:49:43 [build] mode: "static"
+11:49:43 [build] directory: /Users/mottalib/Documents/GitHub/a-publier/Mottalib-10M/sunbymonth.co.uk/dist/
+11:49:43 [build] Collecting build info...
+11:49:43 [build] ✓ Completed in 140ms.
+11:49:43 [build] Building static entrypoints...
+11:49:44 [vite] ✓ built in 1.15s
+11:49:44 [vite] ✓ built in 569ms
+11:49:44 [build] Rearranging server assets...
+
+ generating static routes 
+11:49:44   ├─ /404.html (+12ms) 
+11:49:44   ├─ /embed/finder/index.html (+20ms) 
+11:49:44   ├─ /en/about/index.html (+13ms) 
+11:49:44   ├─ /en/compare-holiday-weather/index.html (+16ms) 
+11:49:44   ├─ /en/contact/index.html (+8ms) 
+11:49:44   ├─ /en/cookies/index.html (+8ms) 
+11:49:44   ├─ /en/editorial-policy/index.html (+8ms) 
+11:49:44   ├─ /en/legal-notice/index.html (+15ms) 
+11:49:44   ├─ /en/method/index.html (+9ms) 
+11:49:44   ├─ /en/privacy/index.html (+7ms) 
+11:49:44   ├─ /en/widget/index.html (+10ms) 
+11:49:44   ├─ /en/index.html (+22ms) 
+11:49:45   ├─ /en/where-is-hot-in-january/index.html (+10ms) 
+11:49:45   ├─ /en/where-is-hot-in-february/index.html (+8ms) 
+11:49:45   ├─ /en/where-is-hot-in-march/index.html (+6ms) 
+11:49:45   ├─ /en/where-is-hot-in-april/index.html (+6ms) 
+11:49:45   ├─ /en/where-is-hot-in-may/index.html (+5ms) 
+11:49:45   ├─ /en/where-is-hot-in-june/index.html (+5ms) 
+11:49:45   ├─ /en/where-is-hot-in-july/index.html (+6ms) 
+11:49:45   ├─ /en/where-is-hot-in-august/index.html (+8ms) 
+11:49:45   ├─ /en/where-is-hot-in-september/index.html (+6ms) 
+11:49:45   ├─ /en/where-is-hot-in-october/index.html (+4ms) 
+11:49:45   ├─ /en/tenerife-weather-by-month/index.html (+5ms) 
+11:49:45   ├─ /en/lanzarote-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/where-is-hot-in-november/index.html (+4ms) 
+11:49:45   ├─ /en/where-is-hot-in-december/index.html (+5ms) 
+11:49:45   ├─ /en/gran-canaria-weather-by-month/index.html (+5ms) 
+11:49:45   ├─ /en/fuerteventura-weather-by-month/index.html (+5ms) 
+11:49:45   ├─ /en/majorca-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/ibiza-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/benidorm-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/malaga-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/lisbon-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/madeira-weather-by-month/index.html (+6ms) 
+11:49:45   ├─ /en/crete-weather-by-month/index.html (+3ms) 
+11:49:45   ├─ /en/rhodes-weather-by-month/index.html (+3ms) 
+11:49:45   ├─ /en/corfu-weather-by-month/index.html (+3ms) 
+11:49:45   ├─ /en/cyprus-weather-by-month/index.html (+3ms) 
+11:49:45   ├─ /en/turkey-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/malta-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/dubai-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/egypt-weather-by-month/index.html (+6ms) 
+11:49:45   ├─ /en/marrakech-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/cape-verde-weather-by-month/index.html (+5ms) 
+11:49:45   ├─ /en/phuket-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/orlando-weather-by-month/index.html (+4ms) 
+11:49:45   ├─ /en/cancun-weather-by-month/index.html (+5ms) 
+11:49:45   ├─ /llms.txt (+3ms) 
+11:49:45   ├─ /index.html (+8ms) 
+11:49:45 ✓ Completed in 371ms.
+
+11:49:45 [build] ✓ Completed in 2.14s.
+11:49:45 [@astrojs/sitemap] `sitemap-index.xml` created at `dist`
+11:49:45 [build] 48 page(s) built in 2.32s
+11:49:45 [build] Complete!
+typo-nbsp: 279 espace(s) rendue(s) insécable(s) dans 25 page(s)
+check-snippets : 39 pages indexables, titres 50-60, descriptions 150-160, ordre des mots et unicite conformes
+
+ RUN  v4.1.12 /Users/mottalib/Documents/GitHub/a-publier/Mottalib-10M/sunbymonth.co.uk
+
+
+ Test Files  2 passed (2)
+      Tests  90 passed (90)
+   Start at  11:49:46
+   Duration  589ms (transform 417ms, setup 0ms, import 559ms, tests 157ms, environment 0ms)
+
+typo-nbsp: 0 espace(s) à corriger dans 0 page(s)
+typo-nbsp: 0 décimale(s) avec un point dans une langue à virgule
+typo-nbsp: 0 pourcentage(s) écrit(s) mal placé(s) : « 20 % » là où la langue écrit « 20% », ou après le nombre en turc, qui écrit « %20 » (souvent dans un composant React : corriger la source)
+typo-nbsp: 0 mot(s) français sans accent ou avec un accent faux
+Identité légale complète, aucune mention provisoire.
+. : 39 pages indexables, 0 à corriger
+
+. : 39 pages comparées, 0 paire(s) trop proches, 0 question(s) recyclée(s)
+
+. : 47 pages, 0 à corriger, 0 question(s) de FAQ recyclée(s)
+. : 51 pages, 0 cible(s) morte(s), 0 lien(s) a corriger, 0 route(s) vide(s)
+check-layout: 39 pages × 4 largeurs, 0 défaut(s)
+check-sources: 12 source(s), 0 morte(s), 0 injoignable(s), 0 bloquée(s) aux robots
+. : 37 page(s) de contenu, 0 sans simulateur
+. : 39 pages, 0 avec hreflang, 0 à corriger
+. : site anglophone, contrôle sans objet.
+check-portefeuille : 0 paragraphe(s) copiés, 0 site(s) du portefeuille liés, 60 sites comparés.
+check-cookies : 0 défaut (49 pages, Clarity sur 46, GA4 G-SLJBKN258M sur 46, langues en)
+check-url-propre: 39 page(s) du sitemap, 0 défaut(s)
+check-premier-ecran : 0 page(s) fautive(s) sur 37 page(s) à simulateur (39 pages lues)
+check-droits : 47 page(s) lues dans dist ; licences citées : aucune ; workflow planifié : non
+  (a) liens soumis à autorisation (citer l’organisme sans lien : titre, adresse en texte, date) : 0
+  (b) relais juridique présenté comme officiel (lien vers le texte officiel, ou « relais non officiel ») : 0
+  (c) copie web.archive.org présentée comme officielle (écrire « copie archivée du JJ/MM/AAAA ») : 0
+  (d) attribution de licence absente du pied de page : 0
+  (e) promesse de mise à jour sans workflow planifié (écrire « lu le JJ/MM/AAAA, mise à jour manuelle ») : 0
+check-droits : 0 défaut
+check-copie : sans objet (pas de data/textes-sources/*.txt)
+  39 page(s), 0 champ(s) mal formaté(s)
+check-contraste: 39 page(s), 0 texte(s) sous le seuil
+check-saisie: 13 page(s) à calculateur, 0 défaut(s)
+  trame        ok         site le plus proche : vorlagenrechner.de (43 % de blocs en commun)
+  chiffres     ok         date de mise à jour visible · 4 source(s) officielle(s) liée(s)
+  credibilite  ok         À propos lié · méthode liée
+  reseau       ok         liens vers : aucun site du portefeuille
+  publicite    ok         0 emplacement(s) publicitaire(s) sur l’accueil
+check-regles : 292 accueils comparés, 0 règle(s) KO ou à revoir
+check-motcle : 0/37 page(s) où le terme-clé du titre manque {}

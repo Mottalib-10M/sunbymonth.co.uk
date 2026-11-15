@@ -1,0 +1,4 @@
+01 / → /en/
+02 menu ☰ ouvert (rubriques dépliées)
+03 /en/phuket-weather-by-month/
+04 /en/cancun-weather-by-month/

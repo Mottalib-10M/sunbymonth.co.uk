@@ -34,9 +34,11 @@ describe('finderView', () => {
     });
   }
 
-  it('the home sentence names the first place of each list', () => {
+  it('the home sentence names the first place of each list', async () => {
+    const { toolLinks } = await import('../src/lib/tool-links');
+    const links = toolLinks();
     for (const m of MONTHS) {
-      const v = finderView(m, DEFAULT_CRITERIA);
+      const v = finderView(m, DEFAULT_CRITERIA, false, (id) => id in links);
       const s = KIT.answer(m);
       if (v.near) expect(s).toContain(v.near.d.name);
       if (v.far) expect(s).toContain(v.far.d.name);
@@ -55,7 +57,32 @@ describe('beachVerdict', () => {
     for (const d of DESTS) for (const m of MONTHS) {
       const v = beachVerdict(d, m);
       expect(v.beach).toBe(v.high >= DEFAULT_CRITERIA.minHigh);
-      if (v.instead) { expect(v.beach).toBe(false); expect(v.instead.d.id).not.toBe(d.id); expect(v.instead.high).toBeGreaterThanOrEqual(DEFAULT_CRITERIA.minHigh); }
+      if (v.instead) { expect(!v.beach || v.rainy).toBe(true); expect(v.instead.d.id).not.toBe(d.id); expect(v.instead.high).toBeGreaterThanOrEqual(DEFAULT_CRITERIA.minHigh); }
     }
+  });
+});
+
+describe('tour 3 : pages and rain lead the order', () => {
+  it('the answer names places with a page and a full rain record, never a rainy one, when one exists', async () => {
+    const { toolLinks } = await import('../src/lib/tool-links');
+    const { isRainy } = await import('../src/lib/engine/climate');
+    const links = toolLinks(); const paged = (id: string) => id in links;
+    for (const m of MONTHS) {
+      const v = finderView(m, DEFAULT_CRITERIA, true, paged);
+      for (const g of v.groups) {
+        const good = g.rows.filter((r) => paged(r.d.id) && r.wet !== null && !isRainy(r.wet));
+        if (good.length) expect(good).toContain(g.rows[0]);
+        const firstRainy = g.rows.findIndex((r) => isRainy(r.wet));
+        if (firstRainy >= 0) expect(g.rows.slice(firstRainy).every((r) => isRainy(r.wet))).toBe(true);
+      }
+    }
+  });
+  it('November: Goa does not lead, Phuket (16 wet days) is flagged rainy', async () => {
+    const { toolLinks } = await import('../src/lib/tool-links');
+    const { beachVerdict, dest } = await import('../src/lib/engine/climate');
+    const links = toolLinks();
+    const v = finderView(11, DEFAULT_CRITERIA, false, (id) => id in links);
+    expect(v.far?.d.id).not.toBe('goa');
+    expect(beachVerdict(dest('phuket'), 11).rainy).toBe(true);
   });
 });

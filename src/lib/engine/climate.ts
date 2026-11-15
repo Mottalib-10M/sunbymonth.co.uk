@@ -68,6 +68,9 @@ export function hottest(m: Month, n = DESTS.length): Dest[] { return [...DESTS].
 /** Destinations within a distance of London, sorted by daytime high for a month. */
 export function hottestWithin(m: Month, km: number, n = 5): Dest[] { return hottest(m).filter((d) => d.km_from_london <= km).slice(0, n); }
 
+/** A rainy month: 9 wet days (1 mm or more) or more, about one day in three; above the finder's highest limit (8). */
+export const RAINY_WET = 9;
+export const isRainy = (w: number | null) => w !== null && w >= RAINY_WET;
 /** Short haul = within this straight-line distance of London; the home sentence and the finder share it. */
 export const SHORT_HAUL_KM = 3500;
 /** The finder's wishes before the reader changes anything: the home sentence is computed with the same ones. */
@@ -83,11 +86,15 @@ export interface FinderView { count: number; matched: boolean; near: Row | null;
  * haul, each led by the place the answer names; `count` is the number of places the reader can reach with
  * "Show all", and `hidden` the number still folded. When nothing matches, the warmest places are listed instead.
  */
-export function finderView(m: Month, c: Criteria, expanded = false): FinderView {
+export function finderView(m: Month, c: Criteria, expanded = false, paged: (id: string) => boolean = () => false): FinderView {
   const all = rank(m, c);
   const ok = all.filter((r) => r.ok);
   const matched = ok.length > 0;
-  const pool = matched ? ok : all.slice(0, 2 * FINDER_PREVIEW);
+  // Within the pool: a place with a page and a full rain record, not rainy, comes first; rainy months go last
+  // (testeurs naïfs, tour 3 : Goa "no page yet" led the long-haul list, Phuket led it with 16 wet days).
+  const tier = (r: Row) => (isRainy(r.wet) ? 2 : paged(r.d.id) && r.wet !== null ? 0 : 1);
+  const pool = (matched ? ok : all.slice(0, 2 * FINDER_PREVIEW)).map((r, i) => [r, i] as const)
+    .sort(([a, i], [b, j]) => tier(a) - tier(b) || i - j).map(([r]) => r);
   const group = (key: 'near' | 'far'): FinderGroup => {
     const rows = pool.filter((r) => (key === 'near' ? r.d.km_from_london <= SHORT_HAUL_KM : r.d.km_from_london > SHORT_HAUL_KM));
     return { key, rows, visible: expanded ? rows : rows.slice(0, FINDER_PREVIEW) };
@@ -100,15 +107,17 @@ export function finderView(m: Month, c: Criteria, expanded = false): FinderView 
 export const RAIN_GAPS: Dest[] = DESTS.filter((d) => d.rain.some((v) => v === null) || d.wet.some((v) => v === null)).sort((a, b) => a.name.localeCompare(b.name));
 /** Thresholds shown under the finder fields ("24 °C: beach weather", "20 °C: most people swim"). */
 export const SWIM_SEA = 20;
-export interface BeachVerdict { beach: boolean; high: number; sea: number | null; swim: boolean | null; instead: Row | null }
+export interface BeachVerdict { beach: boolean; high: number; sea: number | null; swim: boolean | null; wet: number | null; rainy: boolean; instead: Row | null }
 /**
  * The month's verdict at the top of a place page (testeurs naïfs du 2026-11-14, tour 2 : "21 °C, is that good
  * or not?", the answer sat five screens down). Same threshold as the finder default; when the place falls short,
- * `instead` is the place the home answer names for that month (short haul first), never the place itself.
+ * or is warm but rainy (tour 3 : Cancun, Corfu), `instead` is the place the home answer names for that month
+ * (short haul first), never the place itself.
  */
-export function beachVerdict(d: Dest, m: Month): BeachVerdict {
-  const h = high(d, m), s = sea(d, m), beach = h >= DEFAULT_CRITERIA.minHigh;
-  const v = finderView(m, DEFAULT_CRITERIA);
+export function beachVerdict(d: Dest, m: Month, paged: (id: string) => boolean = () => false): BeachVerdict {
+  const h = high(d, m), s = sea(d, m), w = wet(d, m), beach = h >= DEFAULT_CRITERIA.minHigh, rainy = isRainy(w);
+  const v = finderView(m, DEFAULT_CRITERIA, false, paged);
   const alt = v.matched ? (v.near ?? v.far) : null;
-  return { beach, high: h, sea: s, swim: s === null ? null : s >= SWIM_SEA, instead: beach || !alt || alt.d.id === d.id ? null : alt };
+  const bad = !beach || (rainy && !!alt && !isRainy(alt.wet));
+  return { beach, high: h, sea: s, swim: s === null ? null : s >= SWIM_SEA, wet: w, rainy, instead: !bad || !alt || alt.d.id === d.id ? null : alt };
 }
